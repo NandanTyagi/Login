@@ -1,56 +1,34 @@
 // Variables
 const
-    containerDiv = document.getElementById('container'),
     titleDiv = document.getElementById('title'),
     mainDiv = document.getElementById('main'), 
-    
-    logInOutRetryBtn = document.getElementById('button');
-    correctUsername = 'test';
+    logInOutRetryBtn = document.getElementById('button'),
+    correctUsername = 'test',
     correctPassword = '1234';
-    let
+let
     userNameInput = document.getElementById('user-name'),
     passwordInput = document.getElementById('pass-word'),
     userName = userNameInput.value, 
-    password = passwordInput.value;   
+    password = passwordInput.value;  
 // Check if user is not logged out
 if(localStorage.length >= 1){
-    init();
-}
-function init(){
     btnClicked();
 }
 // When button is clicked (Main function)
 function btnClicked() {
-    let
+let
     userNameInput = document.getElementById('user-name'),
     passwordInput = document.getElementById('pass-word');
-    if(logInOutRetryBtn.innerText === 'Try agin?'){
-        logOutBtnClicked();
-    }
     // Check local storage
     if (localStorage.length >= 1){
-        if(logInOutRetryBtn.innerText === 'Log in'){
-            renderWelcomePage();
-        }else {
-            logOutBtnClicked();
-        }
+        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOut();
     }else{
-        if(logInOutRetryBtn.innerText === 'Try agin?'){
-            logOutBtnClicked();
-        }
-        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOutBtnClicked();
+        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOut();
     }
     // When log in button is clicked
     function loginBtnClicked(){
-        let
-            userName = userNameInput.value, 
-            password = passwordInput.value;
         if (localStorage.length >= 1){
-            if(logInOutRetryBtn.innerText === 'Log in'){
-                renderWelcomePage();
-            }else{
-                logIn(userName,password);
-                }
+            logInOutRetryBtn.innerText === 'Log in' ? renderWelcomePage() : null;
         }else if(localStorage.length === 0){
             let
             userName = userNameInput.value, 
@@ -60,23 +38,20 @@ function btnClicked() {
             renderErrorPage();
         }
     }
+    // Verify credentials, save to local storage, show login view or show "error" view
     function logIn(userName,password) {
         if (userName === correctUsername && password === correctPassword){
             addToLocalStorage(userName, password);
             renderWelcomePage();
-            
         }else {
             renderErrorPage();
         }
     }
-    // When log out button is clicked
-    function logOutBtnClicked() {
-        logOut();
-    }
+    // Log out, clear localstorage and show login view
     function logOut() {
         localStorage.clear();
         titleDiv.innerHTML = `
-        <h1>Log in</h1>
+        <h1 class="title">Log in</h1>
         `;
         mainDiv.innerHTML = `
         <input type="text" class="user-name" id="user-name" placeholder="Username">
@@ -84,15 +59,15 @@ function btnClicked() {
         `;
         logInOutRetryBtn.innerText = `Log in`;
     }
-    // Save to local storage
+    // Local storage
     function addToLocalStorage(userName, password) {
         localStorage.setItem('username',userName);
         localStorage.setItem('password',password);
     }
-    // Create the "login successfull" page
+    // Create "login successfull" view
     function renderWelcomePage() {
         titleDiv.innerHTML = `
-        <h1>Hello! "${localStorage.getItem('username')}"
+        <h1 class="title">Hello ${localStorage.getItem('username')}!
         </h1>`;
         mainDiv.innerHTML = `
         <h3 style="text-align:center">Log in successfull!
@@ -100,16 +75,19 @@ function btnClicked() {
         logInOutRetryBtn.innerText = `Log out`;
         console.log(`in renderWelcomePage`); 
     }
-    // Create the "log in unsuccessfull" page
+    // Create "log in unsuccessfull" view
     function renderErrorPage(){
         titleDiv.innerHTML = `
-        <h1>Error!</h1>
+        <h1 class="error title"><em>Error!</em></h1>
         `;
         mainDiv.innerHTML = `
-        <p style="text-align:center">Invalid username or password!
+        <p style="text-align:center" class="error">
+        <em>Invalid username or password!</em>
         </p>`;
-        logInOutRetryBtn.innerText = `Try again?`;
+        logInOutRetryBtn.innerText = `Try again`;
     }
 }
-// Eventlistener
+// Eventlisteners
 logInOutRetryBtn.addEventListener('click', btnClicked);
+document.addEventListener('keydown', e =>
+e.code === 'Enter'|| e.code === 'NumpadEnter' ? btnClicked() : null);

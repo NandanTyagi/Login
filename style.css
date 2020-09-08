@@ -32,6 +32,14 @@ body {
     min-width: 70%;
     max-width: 70%;
 }
+.title {
+    font-weight:500;
+
+}
+p {
+    font-weight: 700;
+    line-height: 1.5;
+}
 input {
     
     padding: 3px;
@@ -47,10 +55,11 @@ input:first-of-type {
     border: none;
     color: white;
     cursor: pointer;
+    font-weight: 500;
     
 }
 .button:hover {
-    color: red;
+    color:black;
     transition: color .2s ease;
     
 }
@@ -65,4 +74,7 @@ input:first-of-type {
     box-shadow: none;
     text-decoration: none;
     appearance: none;
+}
+.error {
+    color: red;
 }
