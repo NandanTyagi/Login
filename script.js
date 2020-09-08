@@ -1,159 +1,93 @@
 // Variables
 const
-    containerDiv = document.getElementById('container'),
     titleDiv = document.getElementById('title'),
     mainDiv = document.getElementById('main'), 
-    
-    logInOutRetryBtn = document.getElementById('button');
-    correctUsername = 'test';
+    logInOutRetryBtn = document.getElementById('button'),
+    correctUsername = 'test',
     correctPassword = '1234';
-    let
+let
     userNameInput = document.getElementById('user-name'),
-    passwordInput = document.getElementById('pass-word');
-    let
-        userName = userNameInput.value, 
-        password = passwordInput.value;
-      
-// If user not logged out
+    passwordInput = document.getElementById('pass-word'),
+    userName = userNameInput.value, 
+    password = passwordInput.value;  
+// Check if user is not logged out
 if(localStorage.length >= 1){
-    init();
-}
-function init(){
     btnClicked();
 }
-// When button is clicked
+// When button is clicked (Main function)
 function btnClicked() {
-    let
+let
     userNameInput = document.getElementById('user-name'),
     passwordInput = document.getElementById('pass-word');
-    if(logInOutRetryBtn.innerText === 'Try agin?'){
-        logOutBtnClicked();
-        // let
-        // userName = userNameInput.value, 
-        // password = passwordInput.value;
-    
-        // console.log(`Begenning in btnClicked() userName = ${userName} userNameInputValue = ${userNameInput.value}`);
-        // console.log(`Begennig in btnClicked() password = ${password} passwordValue = ${passwordInput.value}`);
-    }
-    
-
+    // Check local storage
     if (localStorage.length >= 1){
-        if(logInOutRetryBtn.innerText === 'Log in'){
-            renderWelcomePage();
-            // console.log(`in btnClicked() logInOutRetryBtn.innerText === 'Log in'`);
-        }else if(logInOutRetryBtn.innerText === 'Log out') {
-            logOutBtnClicked();
-            // console.log(`in btnClicked() logInOutRetryBtn.innerText === 'Log out'`);
-        }else {
-            logOutBtnClicked();
-            // console.log(`in btnClicked() inner else`);
-        }
+        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOut();
     }else{
-        if(logInOutRetryBtn.innerText === 'Try agin?'){
-            logOutBtnClicked();
-            // let
-            // userName = userNameInput.value, 
-            // password = passwordInput.value;
-        
-            // console.log(`Begenning in btnClicked() userName = ${userName} userNameInputValue = ${userNameInput.value}`);
-            // console.log(`Begennig in btnClicked() password = ${password} passwordValue = ${passwordInput.value}`);
-        }
-        // let
-        // userName = userNameInput.value, 
-        // password = passwordInput.value;
-        // console.log(`in btnClicked() outer else userName = ${userName} userNameInputValue = ${userNameInput.value}`);
-        // console.log(`in btnClicked() outer else password = ${password} passwordValue = ${passwordInput.value}`);
-
-        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOutBtnClicked();
-        // console.log(`in btnClicked() Ternery else`);
-    
-    // return userName,password;
-}
-// When log in button is clicked
-function loginBtnClicked(){
-    let
-        userName = userNameInput.value, 
-        password = passwordInput.value;
-    if (localStorage.length >= 1){
-        if(logInOutRetryBtn.innerText === 'Log in'){
-            renderWelcomePage();
-            // console.log(`in loginBtnClicked() logInOutRetryBtn.innerText === 'Log in'`);
-        }else{
+        logInOutRetryBtn.innerText === 'Log in' ? loginBtnClicked() : logOut();
+    }
+    // When log in button is clicked
+    function loginBtnClicked(){
+        if (localStorage.length >= 1){
+            logInOutRetryBtn.innerText === 'Log in' ? renderWelcomePage() : null;
+        }else if(localStorage.length === 0){
+            let
+            userName = userNameInput.value, 
+            password = passwordInput.value;
             logIn(userName,password);
-            // console.log('in logInBtnClicked local storage ' + localStorage.getItem('username') + ' ' + localStorage.getItem('password'));
-            }
-    }else if(localStorage.length === 0){
-        let
-        userName = userNameInput.value, 
-        password = passwordInput.value;
-        // console.log(`in loginBtnClicked() localStorage.length === 0 userName = ${userName} userNameInputValue = ${userNameInput.value}`);
-        // console.log(`in loginBtnClicked() localStorage.length === 0 password = ${password} passwordValue = ${passwordInput.value}`);
-        logIn(userName,password);
-        // console.log(`in loginBtnClicked() localStorage.length === 0 `);
-    }else{
-        renderErrorPage();
-        // console.log(`in loginBtnClicked() renderErrorPage();`);
+        }else{
+            renderErrorPage();
+        }
+    }
+    // Verify credentials, save to local storage, show login view or show "error" view
+    function logIn(userName,password) {
+        if (userName === correctUsername && password === correctPassword){
+            addToLocalStorage(userName, password);
+            renderWelcomePage();
+        }else {
+            renderErrorPage();
+        }
+    }
+    // Log out, clear localstorage and show login view
+    function logOut() {
+        localStorage.clear();
+        titleDiv.innerHTML = `
+        <h1 class="title">Log in</h1>
+        `;
+        mainDiv.innerHTML = `
+        <input type="text" class="user-name" id="user-name" placeholder="Username">
+        <input type="password" class="pass-word" id="pass-word" placeholder="Password">
+        `;
+        logInOutRetryBtn.innerText = `Log in`;
+    }
+    // Local storage
+    function addToLocalStorage(userName, password) {
+        localStorage.setItem('username',userName);
+        localStorage.setItem('password',password);
+    }
+    // Create "login successfull" view
+    function renderWelcomePage() {
+        titleDiv.innerHTML = `
+        <h1 class="title">Hello ${localStorage.getItem('username')}!
+        </h1>`;
+        mainDiv.innerHTML = `
+        <h3 style="text-align:center">Log in successfull!
+        `;
+        logInOutRetryBtn.innerText = `Log out`;
+        console.log(`in renderWelcomePage`); 
+    }
+    // Create "log in unsuccessfull" view
+    function renderErrorPage(){
+        titleDiv.innerHTML = `
+        <h1 class="error title"><em>Error!</em></h1>
+        `;
+        mainDiv.innerHTML = `
+        <p style="text-align:center" class="error">
+        <em>Invalid username or password!</em>
+        </p>`;
+        logInOutRetryBtn.innerText = `Try again`;
     }
 }
-function logIn(userName,password) {
-    if (userName === correctUsername && password === correctPassword){
-        addToLocalStorage(userName, password);
-        renderWelcomePage();
-        // console.log(`in logIn() userName === correctUsername && password === correctPassword`);
-        
-    }else {
-        renderErrorPage();
-        // console.log(`in logIn() renderErrorPage();`);
-    }
-}
-// When log out button is clicked
-function logOutBtnClicked() {
-    logOut();
-    // console.log('inlogOutBtn ' + localStorage.getItem('username') + ' ' + localStorage.getItem('password'));  
-}
-function logOut() {
-    localStorage.clear();
-    // userName = userNameInput.value;
-    // password = passwordInput.value;
-    titleDiv.innerHTML = `
-    <h1>Log in</h1>
-    `;
-    mainDiv.innerHTML = `
-    <input type="text" class="user-name" id="user-name" placeholder="Username">
-    <input type="password" class="pass-word" id="pass-word" placeholder="Password">
-    `;
-    logInOutRetryBtn.innerText = `Log in`;
-    // console.log(`in logOut, local storage length = ${localStorage.length}`);
-    // console.log(`in logOut() localStorage.length === 0 userName = ${userName} userNameInputValue = ${userNameInput.value}`);
-    // console.log(`in logOut() localStorage.length === 0 password = ${password} passwordValue = ${passwordInput.value}`);
-}
-// Save to local storage
-function addToLocalStorage(userName, password) {
-    localStorage.setItem('username',userName);
-    localStorage.setItem('password',password);
-}
-// Create the "login successfull" page
-function renderWelcomePage() {
-    titleDiv.innerHTML = `
-    <h1>Hello! "${localStorage.getItem('username')}"
-    </h1>`;
-    mainDiv.innerHTML = `
-    <h3 style="text-align:center">Log in successfull!
-    `;
-    logInOutRetryBtn.innerText = `Log out`;
-    console.log(`in renderWelcomePage`); 
-}
-// Create the "log in unsuccessfull" page
-function renderErrorPage(){
-    titleDiv.innerHTML = `
-    <h1>Error!</h1>
-    `;
-    mainDiv.innerHTML = `
-    <p style="text-align:center">Invalid username or password!
-    </p>`;
-    logInOutRetryBtn.innerText = `Try again?`;
-    // console.log(`in renderErrorPage`);
-}
-}
-// Eventlistener
+// Eventlisteners
 logInOutRetryBtn.addEventListener('click', btnClicked);
+document.addEventListener('keydown', e =>
+e.code === 'Enter'|| e.code === 'NumpadEnter' ? btnClicked() : null);
