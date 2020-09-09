@@ -70,7 +70,7 @@ let
         <h1 class="title">Hello ${localStorage.getItem('username')}!
         </h1>`;
         mainDiv.innerHTML = `
-        <h3 style="text-align:center">Log in successfull!
+        <h3 style="text-align:center">Log in successfull!</h3>
         `;
         logInOutRetryBtn.innerText = `Log out`;
         console.log(`in renderWelcomePage`); 
