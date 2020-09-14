@@ -68,8 +68,7 @@ let
         mainDiv.innerHTML = `
         <h3 style="text-align:center">Log in successfull!
         `;
-        logInOutRetryBtn.innerText = `Log out`;
-        console.log(`in renderWelcomePage`); 
+        logInOutRetryBtn.innerText = `Log out`; 
     }
     // Create "log in unsuccessfull" view
     function renderErrorPage(){
