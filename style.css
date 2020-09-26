@@ -29,6 +29,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     border: 0px solid gray;
     min-width: 60%;
     max-width: 60%;
@@ -46,6 +47,7 @@ p {
 input {
     padding: 3px;
     border-color: grey;
+    width: 80%;
 }
 input:first-of-type {
     margin-bottom:10px;
@@ -91,16 +93,24 @@ input:first-of-type {
     color: red;
 }
 .footer {
-    width: 100%;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1;
     margin: 2em 0 0 0;
 }
+.footer a {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .icon {
+    width: fit-content;
     margin-right: 0;
     cursor: pointer;
+    align-self: center;
+    text-align: center;
 }
 .icon:last-of-type{
     margin: 0;
@@ -108,4 +118,10 @@ input:first-of-type {
 .icon:hover {
     color:black;
     transition: color .2s ease;
+}
+
+@media screen and (max-width:768px){
+    .container {
+        width: 50vw;
+    }
 }
