@@ -90,7 +90,7 @@ input:first-of-type {
     color: white;
 }
 .error {
-    color: red;
+    color: rgb(240, 110, 117);
 }
 .footer {
     width: fit-content;
